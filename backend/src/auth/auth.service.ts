@@ -3,17 +3,17 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { verify } from 'argon2';
-import { Response } from 'express';
-import { AuthDto } from './dto/auth.dto';
-import { UserService } from '../user/user.service';
+} from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
+import { verify } from 'argon2'
+import { Response } from 'express'
+import { AuthDto } from './dto/auth.dto'
+import { UserService } from '../user/users.service'
 
 @Injectable()
 export class AuthService {
-  EXPIRE_DAY_REFRESH_TOKEN = 1;
-  REFRESH_TOKEN_NAME = 'refreshToken';
+  EXPIRE_DAY_REFRESH_TOKEN = 1
+  REFRESH_TOKEN_NAME = 'refreshToken'
 
   constructor(
     private jwt: JwtService,
@@ -21,49 +21,49 @@ export class AuthService {
   ) {}
 
   async login(dto: AuthDto) {
-    const { password, ...user } = await this.validateUser(dto);
-    const tokens = this.issueTokens(user.id);
+    const { password, ...user } = await this.validateUser(dto)
+    const tokens = this.issueTokens(user.id)
 
     return {
       user,
       ...tokens,
-    };
+    }
   }
 
   async register(dto: AuthDto) {
-    const oldUser = await this.userService.getByEmail(dto.email);
+    const oldUser = await this.userService.getByEmail(dto.email)
 
     if (oldUser !== null) {
-      throw new BadRequestException('User already exists');
+      throw new BadRequestException('User already exists')
     }
 
-    const { ...user } = await this.userService.create(dto);
+    const { ...user } = await this.userService.create(dto)
 
-    const tokens = this.issueTokens(user.id);
+    const tokens = this.issueTokens(user.id)
 
     return {
       user,
       ...tokens,
-    };
+    }
   }
 
   async getNewTokens(refreshToken: string) {
-    const result = await this.jwt.verifyAsync(refreshToken);
-    if (!result) throw new UnauthorizedException('Invalid refresh token');
+    const result = await this.jwt.verifyAsync(refreshToken)
+    if (!result) throw new UnauthorizedException('Invalid refresh token')
 
-    const { ...user } = await this.userService.getById(result.id);
+    const { ...user } = await this.userService.getById(result.id)
 
-    const tokens = this.issueTokens(user.id);
+    const tokens = this.issueTokens(user.id)
 
     return {
       user,
       ...tokens,
-    };
+    }
   }
 
   addRefreshTokenToResponse(res: Response, refreshToken: string) {
-    const expiresIn = new Date();
-    expiresIn.setDate(expiresIn.getDate() + this.EXPIRE_DAY_REFRESH_TOKEN);
+    const expiresIn = new Date()
+    expiresIn.setDate(expiresIn.getDate() + this.EXPIRE_DAY_REFRESH_TOKEN)
 
     res.cookie(this.REFRESH_TOKEN_NAME, refreshToken, {
       httpOnly: true,
@@ -72,7 +72,7 @@ export class AuthService {
       secure: true,
       // lax if production
       sameSite: 'none',
-    });
+    })
   }
 
   removeRefreshTokenFromResponse(res: Response) {
@@ -83,32 +83,32 @@ export class AuthService {
       secure: true,
       // lax if production
       sameSite: 'none',
-    });
+    })
   }
 
-  private issueTokens(userId: string) {
-    const data = { id: userId };
+  private issueTokens(userId: number) {
+    const data = { id: userId }
 
     const accessToken = this.jwt.sign(data, {
       expiresIn: '1h',
-    });
+    })
 
     const refreshToken = this.jwt.sign(data, {
       expiresIn: '7d',
-    });
+    })
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken }
   }
 
   private async validateUser(dto: AuthDto) {
-    const user = await this.userService.getByEmail(dto.email);
+    const user = await this.userService.getByEmail(dto.email)
 
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new NotFoundException('User not found')
 
-    const isValid = await verify(user.password, dto.password);
+    const isValid = await verify(user.password, dto.password)
 
-    if (!isValid) throw new UnauthorizedException('Invalid password');
+    if (!isValid) throw new UnauthorizedException('Invalid password')
 
-    return user;
+    return user
   }
 }

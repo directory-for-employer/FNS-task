@@ -14,9 +14,15 @@ enum Role {
 }
 
 model user {
-  id    Int    @id @default(autoincrement())
-  email String @unique
-  pass  String
-  name  String
-  role  Role   @default(USER)
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  name     String
+  role     Role   @default(USER)
+}
+
+model articles {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
 }
