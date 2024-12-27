@@ -38,7 +38,6 @@ export class ArticlesController {
     description: 'OK',
     status: 201,
   })
-  @Auth()
   @Get()
   findAll() {
     return this.articlesService.findAll()
