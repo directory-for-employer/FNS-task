@@ -1,21 +1,12 @@
-import { applyDecorators, UseGuards } from "@nestjs/common";
-import { OnlyAdminGuard } from "../guards/admin.guard";
-import { JwtAuthGuard } from "../guards/jwt.guard";
-import {OnlyModeratorGuard} from "../guards/moderator.guard";
-import {AdminAndModeratorGuard} from "../guards/admin-moderator.guard";
+import { applyDecorators, UseGuards } from '@nestjs/common';
+import { TypeRole } from '../interface/auth.interface';
+import { OnlyAdminGuard } from '../guards/admin.guard';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 
-export type TypeRole = "ADMIN" | "USER" | "U&A" | "MODERATOR" | undefined;
-
-export function Auth(role: TypeRole = "USER") {
+export function Auth(role: TypeRole = 'User') {
   return applyDecorators(
-    role === "ADMIN"
+    role === 'Admin'
       ? UseGuards(JwtAuthGuard, OnlyAdminGuard)
-      : UseGuards(JwtAuthGuard),
-    role === "MODERATOR"
-        ? UseGuards(JwtAuthGuard, OnlyModeratorGuard)
-        : UseGuards(JwtAuthGuard),
-    role === "U&A"
-      ? UseGuards(JwtAuthGuard, AdminAndModeratorGuard)
       : UseGuards(JwtAuthGuard),
   );
 }

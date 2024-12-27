@@ -3,16 +3,17 @@ import {
   ExecutionContext,
   ForbiddenException,
   Injectable,
-} from "@nestjs/common";
+} from '@nestjs/common';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class OnlyAdminGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<{ user: User }>();
     const user = request.user;
-    if (user.role !== "ADMIN")
-      throw new ForbiddenException("You have no rights!");
+    if (user.role !== 'Admin')
+      throw new ForbiddenException('You have no rights!');
 
-    return user.role === "ADMIN";
+    return user.role === 'Admin';
   }
 }

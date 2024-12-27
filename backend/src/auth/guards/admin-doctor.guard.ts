@@ -2,13 +2,13 @@ import {CanActivate, ExecutionContext, ForbiddenException, Injectable} from "@ne
 
 
 @Injectable()
-export class AdminAndModeratorGuard implements CanActivate {
+export class AdminAndDoctorGuard implements CanActivate {
     canActivate(context: ExecutionContext): boolean {
         const request = context.switchToHttp().getRequest();
         const user = request.user;
-        if (user.role !== "ADMIN" && user.role !== "MODERATOR")
+        if (user.role !== "ADMIN" && user.role !== "DOCTOR")
             throw new ForbiddenException("You have no rights!");
 
-        return user.role === "ADMIN" || user.role === "MODERATOR";
+        return user.role === "ADMIN" || user.role === "DOCTOR";
     }
 }
