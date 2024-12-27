@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common'
+import { Body, Controller, Get, Post } from '@nestjs/common'
 
 import { UserService } from './users.service'
 import { UserRoleDto } from './dto/update-user.dto'
@@ -16,8 +9,11 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UsePipes(new ValidationPipe())
-  @ApiOperation({ summary: 'Смена роли пользователя' })
+  @ApiOperation({ summary: 'Поиск всех пользователей' })
+  @ApiResponse({
+    description: 'OK',
+    status: 201,
+  })
   @Auth('ADMIN')
   @Get('/get-all-users')
   async getAllUsers() {
