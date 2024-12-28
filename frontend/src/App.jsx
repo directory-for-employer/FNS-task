@@ -17,13 +17,11 @@ export default function App() {
         <Route path="/" element={<HomePage/>} />
             <Route path="news/add" element={
                 <RequireAuth>
-                <NewsAddPage/>
+                    <NewsAddPage/>
                 </RequireAuth>} />
               <Route path="news/:id" element={<NewsPage/>} />
             <Route path="news/:id/edit" element={
-                <RequireAuth>
                     <EditPage/>
-                </RequireAuth>
             } />
             <Route path='login' element={<LoginPage/>} />
 

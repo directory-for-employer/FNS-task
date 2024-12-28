@@ -20,7 +20,7 @@ const HomePage = () => {
             <h1 className="text-3xl font-bold underline">Страница для новостей</h1>
 
             <Link to="news/add">Add new News</Link>
-
+            <div className="flex-1 justify-items-centerp-8  w-96 ">
             {news && news.map(article => (
                 <div key={article.id} className='p-8'>
                     <div>{article.title}</div>
@@ -30,6 +30,7 @@ const HomePage = () => {
                     </NavLink>
                 </div>
             ))}
+            </div>
         </>
     );
 };

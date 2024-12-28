@@ -27,7 +27,7 @@ export class ArticlesController {
       description: '3 статья',
     },
   })
-  @Auth('A&M')
+  // @Auth('A&M')
   @Post()
   create(@Body() dto: CreateArticleDto) {
     return this.articlesService.create(dto)
@@ -68,7 +68,7 @@ export class ArticlesController {
       description: '3 статья',
     },
   })
-  @Auth('A&M')
+  // @Auth('A&M')
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateArticleDto: UpdateArticleDto) {
     return this.articlesService.update(+id, updateArticleDto)
