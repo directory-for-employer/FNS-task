@@ -1,20 +1,24 @@
-import {Navigate, useLocation} from "react-router";
-import {ReactNode} from "react";
+import {Navigate, useLocation, useNavigate} from "react-router";
+import {PropsWithChildren} from "react";
 import {useAuth} from "../hook/useAuth";
 
+type ProtectedRouteProps = PropsWithChildren;
 
-interface RequireAuthProps {
-    children?: ReactNode;
-}
-
-const RequireAuth = ({children}: RequireAuthProps) => {
-    const location = useLocation()
+const RequireAuth = ({children}: ProtectedRouteProps) => {
+    const location = useLocation();
+    const navigate = useNavigate();
     const {user} = useAuth()
+    console.log(user);
 
-    if(!user) {
-        return <Navigate to='/login' state={{state: location }}/>
+    if(!user){
+        return <Navigate to='/login' state={{from: location}}/>
     }
 
+    // useEffect(() => {
+    //     if(user === null) {
+    //         navigate("/login", { replace: true });
+    //     }
+    // }, [navigate, user])
 
     return children
 };

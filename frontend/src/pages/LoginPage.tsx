@@ -1,8 +1,8 @@
-import {useLocation} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 import {useAuth} from "../hook/useAuth";
 
 const LoginPage = () => {
-    // const navigate = useNavigation();
+    const navigate = useNavigate();
     const location = useLocation();
     const {singIn} = useAuth();
     const fromPage = location.state?.state?.pathname || '/'
@@ -13,7 +13,7 @@ const LoginPage = () => {
         const email = form.email.value
         const password = form.password.value
 
-        singIn({email, password}, ()=> console.log(fromPage))
+        singIn({email, password}, navigate(`${fromPage}`, {replace: true}))
     }
 
     return (

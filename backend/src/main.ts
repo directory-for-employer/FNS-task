@@ -14,7 +14,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .build()
   app.enableCors({
-    origin: ['https://themedik.ru', 'http://localhost:5173'],
+    origin: ['http://localhost:5173', 'http://localhost:4173'],
     credentials: true,
   })
   const documentFactory = () => SwaggerModule.createDocument(app, config)
